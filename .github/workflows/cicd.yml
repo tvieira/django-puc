@@ -4,13 +4,16 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  testar:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10"]
 
     steps:
       - name: Checkout Repository
@@ -30,3 +33,25 @@ jobs:
         working-directory: ./src
         run: |
           python manage.py test
+
+  implantar:
+    needs: [testar]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - name: SSH PULL/INSTALL/MIGRATE/RESTART
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          # Exporta envs para ter acesso ao nodejs
+          script: /
+            cd ~
+            mkdir myapp
+            cd ~/myapp
+            git fetch
+            git checkout https://github.com/tvieira/django-puc.git .
