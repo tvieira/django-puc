@@ -49,7 +49,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           # Exporta envs para ter acesso ao nodejs
-          script: /
+          script: |
             cd ~
             mkdir myapp
             cd ~/myapp
