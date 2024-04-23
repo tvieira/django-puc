@@ -54,8 +54,10 @@ jobs:
             cd ~/myapp
             source env/bin/activate
             git fetch
-            git checkout https://github.com/tvieira/django-puc.git .
+            git checkout main
+            git pull
             pip install -r requirements.txt
             cd ~/myapp/src
             python manage.py makemigrations
             python manage.py migrate
+            python manage.py collectstatic --noinput

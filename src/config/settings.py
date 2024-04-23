@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-8mpr5nyc2sw($mk(^xf4#450*gk3x!lfvc-r*^fg=y8=u1k5m%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["obelix.tvieira.com", "127.0.0.1"]
 
 
 # Application definition
