@@ -33,3 +33,32 @@ jobs:
         working-directory: ./src
         run: |
           python manage.py test
+
+  implantar:
+    needs: [testar]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - name: SSH PULL/INSTALL/MIGRATE/RESTART
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          # Exporta envs para ter acesso ao nodejs
+          script: |
+            cd ~
+            cd ~/myapp
+            source env/bin/activate
+            git fetch
+            git checkout main
+            git pull
+            pip install -r requirements.txt
+            cd ~/myapp/src
+            python manage.py makemigrations
+            python manage.py migrate
+            python manage.py collectstatic --noinput
+            sudo systemctl restart gunicorn
