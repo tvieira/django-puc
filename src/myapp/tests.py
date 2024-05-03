@@ -1,8 +1,11 @@
+"""Testes"""
+
 from django.test import TestCase
 
 
-# Create your tests here.
 class ViewsTestCase(TestCase):
+    """Teste de visualizacao"""
+
     def test_index_loads_properly(self):
         """testa se index roda"""
         response = self.client.get("127.0.0.1:8000")
